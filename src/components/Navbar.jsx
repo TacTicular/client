@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 p-5 shadow-lg w-full">
+    <nav className="bg-gradient-to-r from-blue-400 via-purple-350 to-pink-500 p-5 shadow-lg w-full">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center space-x-3">
           <img src="/logo.png" alt="Logo" className="w-16 h-auto" />
