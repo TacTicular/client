@@ -114,22 +114,36 @@ const Board = ({ socket, room, player }) => {
   return (
     <div className="flex flex-col items-center p-6 bg-gradient-to-t from-purple-500 via-blue-400 to-purple-300 rounded-lg shadow-lg w-full max-w-md">
       <h2 className="text-2xl font-semibold mb-4 text-white">
-        {!winner && !draw && currentTurn !== player && (
-          <h3 className="text-xl text-gray-100 mb-2">
-            {opponentUsername ? (
-              `Your opponent's turn`
+        {winner && (
+          <span className="bg-gradient-to-r from-yellow-400 via-red-500 to-purple-500 text-transparent bg-clip-text font-bold">
+            Winner: {usernames[winner]} ({winner})
+          </span>
+        )}
+        {!winner && draw && (
+          <span className="text-pink-400 font-bold">Result: Draw!</span>
+        )}
+        {!winner && !draw && (
+          <h3 className="text-xl mb-2">
+            {currentTurn === player ? (
+              <span className="text-orange-500 font-bold animate-pulse">
+                Your turn
+              </span>
+            ) : opponentUsername ? (
+              <span className="text-blue-500 font-semibold">
+                Your opponent's turn
+              </span>
             ) : (
-              <span className="text-yellow-400">Waiting for opponents...</span>
+              <span className="text-orange-400 font-semibold animate-bounce">
+                Waiting for opponents...
+              </span>
             )}
           </h3>
         )}
-        {winner
-          ? `Winner: ${usernames[winner]} (${winner})`
-          : draw
-          ? "Result: Draw!"
-          : `${
-              usernames[currentTurn] ? usernames[currentTurn] : "Player"
-            }'s turn`}
+        {!winner && !draw && (
+          <span className="text-gray-100">
+            {usernames[currentTurn] ? usernames[currentTurn] : "Player"}'s turn
+          </span>
+        )}
       </h2>
 
       <div className="grid grid-cols-3 gap-2 mb-4">

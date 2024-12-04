@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -7,6 +8,14 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!username) {
+      Swal.fire({
+        icon: "error",
+        title: "Name is required!",
+        text: "Please enter your name",
+      });
+    }
 
     localStorage.setItem("username", username);
     navigate("/play");
