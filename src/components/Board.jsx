@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { useTheme } from "../contexts/ThemeContexts";
 
 const Cell = ({ value, onClick, isOpponentTurn }) => {
+  const { currentTheme, theme } = useTheme();
+
   return (
     <button
       onClick={onClick}
       className={`w-16 h-16 flex justify-center items-center text-2xl border-2 rounded-md
-        ${isOpponentTurn ? "bg-gray-700" : value ? "bg-gray-300" : "bg-white"} 
-        cursor-${isOpponentTurn ? "not-allowed" : "pointer"} 
-        hover:bg-blue-100 transition-all duration-200 ease-in-out`}
+      ${isOpponentTurn ? "bg-gray-700" : value ? "bg-gray-300" : "bg-white"} 
+      cursor-${isOpponentTurn ? "not-allowed" : "pointer"} 
+      hover:bg-blue-100 transition-all duration-200 ease-in-out
+      ${theme[currentTheme].button}`}
       disabled={isOpponentTurn}
     >
       {value}
@@ -20,6 +24,7 @@ const Board = ({ socket, room, player }) => {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentTurn, setCurrentTurn] = useState("X");
   const [usernames, setUsernames] = useState({});
+  const { currentTheme, theme } = useTheme();
 
   const handleClick = (index) => {
     if (board[index] || currentTurn !== player) return;
@@ -112,8 +117,10 @@ const Board = ({ socket, room, player }) => {
   }, [winner, draw, usernames]);
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gradient-to-t from-purple-500 via-blue-400 to-purple-300 rounded-lg shadow-lg w-full max-w-md">
-      <h2 className="text-2xl font-semibold mb-4 text-white">
+    <div
+      className={`flex flex-col items-center p-6 rounded-lg shadow-lg w-full max-w-md ${theme[currentTheme].background} ${theme[currentTheme].text}`}
+    >
+      <h2 className="text-2xl font-semibold mb-4">
         {winner && (
           <span className="bg-gradient-to-r from-yellow-400 via-red-500 to-purple-500 text-transparent bg-clip-text font-bold">
             Winner: {usernames[winner]} ({winner})

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useTheme } from "../contexts/ThemeContexts";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const { currentTheme, theme } = useTheme();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,14 +24,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-300 via-orange-400 to-red-400 h-screen">
+    <div
+      className={`${theme[currentTheme].background} ${theme[currentTheme].text} flex-1 flex flex-col items-center justify-center h-screen`}
+    >
       <div className="w-full max-w-xs">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 border-4 border-yellow-300"
+          className={`${theme[currentTheme].button} shadow-lg rounded-lg px-8 pt-6 pb-8 border-4 border-orange-300`}
         >
-          <h1 className="text-4xl text-center text-orange-500 font-extrabold mb-4">
-            Tac<span className="text-red-500">Ticular</span>
+          <h1 className="text-4xl text-center font-extrabold mb-4">
+            Tac<span className="text-yellow-300">Ticular</span>
           </h1>
           <input
             name="username"
