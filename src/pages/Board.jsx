@@ -122,4 +122,5 @@ const Board = ({ socket, room, player }) => {
   );
 };
 
-export default Board;
+export default Board; 
+
