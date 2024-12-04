@@ -13,12 +13,37 @@ export default function Play() {
   const [player, setPlayer] = useState("");
   const [usernames, setUsernames] = useState({});
   const { currentTheme, theme } = useTheme();
+  const [playerCount, setPlayerCount] = useState(0);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
     }
+  }, []);
+
+  useEffect(() => {
+    socket.on("playerCount", (count) => {
+      setPlayerCount(count);
+    });
+
+    return () => {
+      socket.off("playerCount");
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("invalidRoom", (message) => {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Room",
+        text: message,
+      });
+    });
+
+    return () => {
+      socket.off("invalidRoom");
+    };
   }, []);
 
   const joinRoom = () => {
@@ -73,11 +98,13 @@ export default function Play() {
             type="text"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
-            placeholder="Room"
-            className={`w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg ${
-              theme[currentTheme].text
-            } ${currentTheme === "dark" ? "text-gray-900" : ""}`}
+            placeholder="4-digit number"
+            className={`w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg text-center 
+    ${theme[currentTheme].text} ${
+              currentTheme === "dark" ? "text-gray-900" : ""
+            }`}
           />
+
           <button
             onClick={joinRoom}
             className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
@@ -90,6 +117,13 @@ export default function Play() {
           >
             Change Username
           </button>
+        </div>
+      ) : playerCount < 2 ? (
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50"></div>
+          <div className="text-xl text-gray-500 mb-2">
+            Waiting for opponents...
+          </div>
         </div>
       ) : (
         <div

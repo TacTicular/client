@@ -55,9 +55,18 @@ const Board = ({ socket, room, player }) => {
       }
     );
 
+    socket.on("playerDisconnected", (message) => {
+      Swal.fire({
+        icon: "warning",
+        title: "Player Disconnected",
+        text: message,
+      });
+    });
+
     return () => {
       socket.off("assignPlayer");
       socket.off("updateBoard");
+      socket.off("playerDisconnected");
     };
   }, [socket]);
 
@@ -140,15 +149,20 @@ const Board = ({ socket, room, player }) => {
                 Your opponent's turn
               </span>
             ) : (
-              <span className="text-orange-400 font-semibold animate-bounce">
+              <span className="text-red-400 font-semibold animate-bounce">
                 Waiting for opponents...
               </span>
             )}
           </h3>
         )}
+
         {!winner && !draw && (
           <span className="text-gray-100">
-            {usernames[currentTurn] ? usernames[currentTurn] : "Player"}'s turn
+            {currentTurn === player
+              ? `${usernames[player] ? usernames[player] : "Player"}'s turn`
+              : `${
+                  usernames[currentTurn] ? usernames[currentTurn] : "Other"
+                }'s turn`}
           </span>
         )}
       </h2>
