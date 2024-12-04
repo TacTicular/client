@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import socket from "../socket";
-import Board from "./Board";
+import Board from "../components/Board";
 
 export default function Play() {
   const [room, setRoom] = useState("");
@@ -8,6 +8,13 @@ export default function Play() {
   const [connected, setConnected] = useState(false);
   const [player, setPlayer] = useState("");
   const [usernames, setUsernames] = useState({});
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   const joinRoom = () => {
     if (room && username) {
@@ -30,52 +37,34 @@ export default function Play() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-600 to-blue-400 text-white p-6">
       {!connected ? (
-        <div>
-          <h2>Masukkan Nama Ruangan dan Username</h2>
+        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg text-center text-black">
+          <h2 className="text-3xl font-semibold text-purple-600 mb-4">
+            Masukkan Room, Player {username}
+          </h2>
           <input
             type="text"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
             placeholder="Nama Ruangan"
-            style={{
-              padding: "10px",
-              fontSize: "16px",
-              marginBottom: "10px",
-            }}
-          />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            style={{
-              padding: "10px",
-              fontSize: "16px",
-              marginBottom: "10px",
-            }}
+            className="w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg"
           />
           <button
             onClick={joinRoom}
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "#646cff",
-              color: "#fff",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
+            className="w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
           >
             Bergabung
           </button>
         </div>
       ) : (
-        <div>
-          <h2>Ruangan: {room}</h2>
-          <h3>
-            Anda adalah pemain: {username} ({player})
+        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg text-center text-black">
+          <h2 className="text-3xl font-semibold text-purple-600 mb-2">
+            Ruangan: <span className="font-medium text-blue-600">{room}</span>
+          </h2>
+          <h3 className="text-xl text-gray-600 mb-4">
+            Player: {username}, sebagai{" "}
+            <span className="font-medium text-blue-600">({player})</span>
           </h3>
           <Board
             socket={socket}
