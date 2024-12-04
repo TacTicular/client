@@ -58,7 +58,7 @@ const Board = ({ socket, room, player }) => {
 
   const resetGame = () => {
     socket.emit("reset", room);
-    Swal.close(); // Menutup dialog jika reset dilakukan
+    Swal.close();
   };
 
   const calculateWinner = (squares) => {
@@ -95,7 +95,7 @@ const Board = ({ socket, room, player }) => {
     if (winner) {
       Swal.fire({
         title: "Game Over",
-        text: `Pemenang: ${usernames[winner]} (${winner})`,
+        text: `Winner: ${usernames[winner]} (${winner})`,
         icon: "success",
         confirmButtonText: "Reset Game",
         allowOutsideClick: false,
@@ -103,7 +103,7 @@ const Board = ({ socket, room, player }) => {
     } else if (draw) {
       Swal.fire({
         title: "Game Over",
-        text: "Hasil: Seri!",
+        text: "Result: draw!",
         icon: "info",
         confirmButtonText: "Reset Game",
         allowOutsideClick: false,
@@ -124,9 +124,9 @@ const Board = ({ socket, room, player }) => {
           </h3>
         )}
         {winner
-          ? `Pemenang: ${usernames[winner]} (${winner})`
+          ? `Winner: ${usernames[winner]} (${winner})`
           : draw
-          ? "Hasil: Seri!"
+          ? "Result: Draw!"
           : `${
               usernames[currentTurn] ? usernames[currentTurn] : "Player"
             }'s turn`}
@@ -142,15 +142,6 @@ const Board = ({ socket, room, player }) => {
           />
         ))}
       </div>
-
-      {/* {(winner || draw) && (
-        <button
-          onClick={resetGame}
-          className="mt-4 py-2 px-6 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition duration-300 ease-in-out"
-        >
-          Reset Game
-        </button>
-      )} */}
     </div>
   );
 };
