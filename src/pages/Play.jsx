@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import socket from "../socket";
 import Board from "../components/Board";
+import { useNavigate } from "react-router-dom";
 
 export default function Play() {
+  const navigate = useNavigate()
   const [room, setRoom] = useState("");
   const [username, setUsername] = useState("");
   const [connected, setConnected] = useState(false);
@@ -36,6 +38,11 @@ export default function Play() {
     }
   };
 
+  function handleUsername() {
+    localStorage.clear()
+    navigate('/login')
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-600 to-blue-400 text-white p-6">
       {!connected ? (
@@ -52,9 +59,15 @@ export default function Play() {
           />
           <button
             onClick={joinRoom}
-            className="w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
+            className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
           >
             Bergabung
+          </button>
+          <button
+            onClick={handleUsername}
+            className="w-full py-3 bg-red-400 text-black font-semibold rounded-lg shadow-lg hover:bg-red-500 transition duration-300"
+          >
+            Change Username
           </button>
         </div>
       ) : (

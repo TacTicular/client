@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const Cell = ({ value, onClick, isOpponentTurn }) => {
   return (
@@ -57,6 +58,7 @@ const Board = ({ socket, room, player }) => {
 
   const resetGame = () => {
     socket.emit("reset", room);
+    Swal.close(); // Menutup dialog jika reset dilakukan
   };
 
   const calculateWinner = (squares) => {
@@ -82,11 +84,32 @@ const Board = ({ socket, room, player }) => {
     }
     return null;
   };
+
   const winner = calculateWinner(board);
   const draw = !winner && board.every((cell) => cell !== null);
   const isOpponentTurn = currentTurn !== player;
 
   const opponentUsername = usernames[player === "X" ? "O" : "X"];
+
+  useEffect(() => {
+    if (winner) {
+      Swal.fire({
+        title: "Game Over",
+        text: `Pemenang: ${usernames[winner]} (${winner})`,
+        icon: "success",
+        confirmButtonText: "Reset Game",
+        allowOutsideClick: false,
+      }).then(() => resetGame());
+    } else if (draw) {
+      Swal.fire({
+        title: "Game Over",
+        text: "Hasil: Seri!",
+        icon: "info",
+        confirmButtonText: "Reset Game",
+        allowOutsideClick: false,
+      }).then(() => resetGame());
+    }
+  }, [winner, draw, usernames]);
 
   return (
     <div className="flex flex-col items-center p-6 bg-gradient-to-t from-purple-500 via-blue-400 to-purple-300 rounded-lg shadow-lg w-full max-w-md">
@@ -120,14 +143,14 @@ const Board = ({ socket, room, player }) => {
         ))}
       </div>
 
-      {(winner || draw) && (
+      {/* {(winner || draw) && (
         <button
           onClick={resetGame}
           className="mt-4 py-2 px-6 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition duration-300 ease-in-out"
         >
           Reset Game
         </button>
-      )}
+      )} */}
     </div>
   );
 };
