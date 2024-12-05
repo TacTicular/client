@@ -46,7 +46,8 @@ export default function Play() {
     };
   }, []);
 
-  const joinRoom = () => {
+  const joinRoom = (e) => {
+    e.preventDefault();
     if (!room) {
       Swal.fire({
         icon: "error",
@@ -94,23 +95,26 @@ export default function Play() {
           <h2 className="text-2xl font-semibold text-purple-600 mb-4">
             Hi {username}! Please enter room
           </h2>
-          <input
-            type="text"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            placeholder="4-digit number"
-            className={`w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg text-center 
+          <form onSubmit={joinRoom}>
+            <input
+              type="number"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              placeholder="4-digit number"
+              className={`w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg text-center 
     ${theme[currentTheme].text} ${
-              currentTheme === "dark" ? "text-gray-900" : ""
-            }`}
-          />
+                currentTheme === "dark" ? "text-gray-900" : ""
+              }`}
+            />
 
-          <button
-            onClick={joinRoom}
-            className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
-          >
-            Join
-          </button>
+            <button
+              // onClick={joinRoom}
+              type="submit"
+              className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
+            >
+              Join
+            </button>
+          </form>
           <button
             onClick={handleUsername}
             className="mt-2 w-full py-3 bg-red-400 text-black font-semibold rounded-lg shadow-lg hover:bg-red-500 transition duration-300"
