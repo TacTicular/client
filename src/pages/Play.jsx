@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Play() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [room, setRoom] = useState("");
   const [username, setUsername] = useState("");
   const [connected, setConnected] = useState(false);
@@ -19,12 +19,13 @@ export default function Play() {
     }
   }, []);
 
-  const joinRoom = () => {
-    if(!room) {
+  const joinRoom = (e) => {
+    e.preventDefault();
+    if (!room) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Please enter a room!"
+        text: "Please enter a room!",
       });
     }
 
@@ -44,7 +45,7 @@ export default function Play() {
       socket.on("roomFull", (message) => {
         Swal.fire({
           icon: "error",
-          title: message + ' !',
+          title: message + " !",
           text: "Please enter other rooms",
         });
       });
@@ -52,8 +53,8 @@ export default function Play() {
   };
 
   function handleUsername() {
-    localStorage.clear()
-    navigate('/login')
+    localStorage.clear();
+    navigate("/login");
   }
 
   return (
@@ -63,19 +64,22 @@ export default function Play() {
           <h2 className="text-2xl font-semibold text-purple-600 mb-4">
             Hi {username}! Please enter room
           </h2>
-          <input
-            type="text"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            placeholder="Room"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg"
-          />
-          <button
-            onClick={joinRoom}
-            className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
-          >
-            Join
-          </button>
+          <form onSubmit={joinRoom}>
+            <input
+              type="text"
+              value={room}
+              onChange={(e) => setRoom(e.target.value)}
+              placeholder="Room"
+              className="w-full p-3 border-2 border-gray-300 rounded-lg mb-4 text-lg"
+            />
+            <button
+              // onClick={joinRoom}
+              type="submit"
+              className="pb-3 w-full py-3 bg-yellow-300 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-400 transition duration-300"
+            >
+              Join
+            </button>
+          </form>
           <button
             onClick={handleUsername}
             className="mt-2 w-full py-3 bg-red-400 text-black font-semibold rounded-lg shadow-lg hover:bg-red-500 transition duration-300"
